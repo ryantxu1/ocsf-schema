@@ -1,6 +1,6 @@
 {
   "caption": "Registry Value",
-  "description": "The registry value object describes a Windows registry value.",
+  "description": "The registry value object describes a Windows registry value. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:WindowsRegistry/'>d3f:WindowsRegistry</a>.",
   "extends": "object",
   "name": "registry_value",
   "observable": 29,

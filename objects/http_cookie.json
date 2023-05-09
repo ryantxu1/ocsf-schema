@@ -1,7 +1,7 @@
 {
   "caption": "HTTP Cookie",
   "name": "http_cookie",
-  "description": "An HTTP cookie (web cookie, browser cookie) is a small piece of data that a server sends to a user's web browser.",
+  "description": "An HTTP cookie (web cookie, browser cookie) is a small piece of data that a server sends to a user's web browser. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:SessionCookie/'>d3f:SessionCookie</a>.",
   "extends": "object",
   "attributes": {
     "name": {

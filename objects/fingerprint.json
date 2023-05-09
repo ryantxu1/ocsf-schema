@@ -1,7 +1,7 @@
 {
   "caption": "Fingerprint",
   "name": "fingerprint",
-  "description": "The fingerprint object describes the algorithm and value of digital fingerprint. A fingerprint is a short sequence of bytes used to identify a longer public key or file content.",
+  "description": "The fingerprint object describes the algorithm and value of digital fingerprint. A fingerprint is a short sequence of bytes used to identify a longer public key or file content. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:FileHash/'>d3f:FileHash</a>.",
   "extends": "object",
   "attributes": {
     "algorithm": {

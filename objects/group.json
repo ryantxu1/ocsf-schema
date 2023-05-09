@@ -1,7 +1,7 @@
 {
   "caption": "Group",
   "name": "group",
-  "description": "The group object associated with an entity such as user, policy, or device.",
+  "description": "The group object associated with an entity such as user, policy, or device. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:UserGroup/'>d3f:UserGroup</a>.",
   "extends": "entity",
   "attributes": {
     "desc": {
