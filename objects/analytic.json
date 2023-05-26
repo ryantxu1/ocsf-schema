@@ -1,7 +1,7 @@
 {
     "caption": "Analytic",
     "name": "analytic",
-    "description": "The analytic technique associated with a finding. May be used in D3FEND Techniques.",
+    "description": "The analytic technique associated with a finding.",
   "extends": "entity",
     "attributes": {
       "category": {
