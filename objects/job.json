@@ -1,7 +1,7 @@
 {
   "caption": "Job",
   "name": "job",
-  "description": "The job object describes the name, command line and state of a scheduled job or task.",
+  "description": "The job object describes the name, command line and state of a scheduled job or task. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:ScheduledTask/'>d3f:ScheduledTask</a>.",
   "extends": "object",
   "attributes": {
     "cmd_line": {

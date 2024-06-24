@@ -1,6 +1,6 @@
 {
   "caption": "Account",
-  "description": "The account object describes details about the account that was the source of the activity.",
+  "description": "The account object describes details about the account that was the source of the activity. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:UserAccount/'>d3f:UserAccount</a> and D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:CloudUserAccount/'>d3f:CloudUserAccount</a>.",
   "name": "account",
   "extends": "entity",
   "attributes": {

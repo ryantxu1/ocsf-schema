@@ -1,7 +1,7 @@
 {
   "caption": "Device Hardware Info",
   "name": "device_hw_info",
-  "description": "The device hardware information.",
+  "description": "The device hardware information. Defined by D3FEND <a target='_blank' href='https://d3fend.mitre.org/dao/artifact/d3f:HardwareDevice/'>d3f:HardwareDevice</a>.",
   "extends": "object",
   "attributes": {
     "bios_date": {
