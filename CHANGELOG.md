@@ -1,15 +1,8 @@
 # CHANGELOG
-All notable changes to this project will be documented in this file. `[Unreleased]` section at the top, will be used to track upcoming changes.
+All notable changes to this project will be documented in this file. Changes for the next release are collected in [changelog.d](changelog.d/), one file per pull request, and added under the release's version heading when the release is prepared.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-<!-- When updating the Changelog:
-
-- Please follow Keep a Changelog guiding principles: https://keepachangelog.com/en/1.1.0/#how.
-- Make sure you add your entry to the correct section.
-
-Thankyou! -->
 
 <!-- All available sections in the Changelog:
 
@@ -41,20 +34,317 @@ Thankyou! -->
 
 -->
 
+<!-- Don't edit the Unreleased section in a pull request. Add changelog.d/<PR number>.md
+instead; see changelog.d/README.md. When a release is prepared,
+`python .github/scripts/changelog.py build` adds those entries here, under the release's
+version heading.
+
+Entries follow the Keep a Changelog guiding principles: https://keepachangelog.com/en/1.1.0/#how. -->
+
 ## [Unreleased]
 
+## [v1.10.0] - Nov 20th, 2026
+
+### Added
+* #### Categories
+* #### Event Classes
+  1. Added `dns_zone_transfer_activity` (`DNS Zone Transfer Activity`) class to capture DNS zone transfers (AXFR/IXFR) and NOTIFY. [#1675](https://github.com/ocsf/ocsf-schema/pull/1675)
+* #### Profiles
+  1. Added optional `ai_capability` attribute to the `ai_operation` profile, recording the invoked AI capability (tool, resource, or prompt). [#1729](https://github.com/ocsf/ocsf-schema/pull/1729)
+  1. Added `physical_site` profile carrying physical site context through the `physical_site` object, attached to the Identity & Access Management and Findings classes, and to the `location` object so devices, endpoints, and persons carry site context through `location`. [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+* #### Objects
+  1. Added `firewall_rule_evaluation` (Security Control Rule Evaluation), extending `firewall_rule` with optional normalized action and disposition attributes. [#1786](https://github.com/ocsf/ocsf-schema/pull/1786)
+  1. Added `ai_capability` object describing an invoked AI capability - its primitive kind, provenance (serving system and transport), declared behavior hints, and input/output schema, description, and baseline fingerprints. [#1729](https://github.com/ocsf/ocsf-schema/pull/1729)
+  1. Added the `ai_status` object for per-operation outcome scalars contributed by the `ai_operation` profile, with `stop_reason` / `stop_reason_id` (enum: Unknown (0), End of Turn (1), Token Limit (2), Tool Use (3), Session Stop (4), Content Filter (5), Other (99)) and `permission_result` / `permission_result_id` (enum: Unknown (0), Allowed (1), Denied (2), Other (99)). Additional outcome attributes may be added in later versions. [#1704](https://github.com/ocsf/ocsf-schema/pull/1704)
+  1. Added the `wifi` object describing IEEE 802.11 network identity, radio and security attributes. [#1721](https://github.com/ocsf/ocsf-schema/pull/1721)
+  1. Added `dns_soa` object to represent the RFC 1035 SOA (Start of Authority) record RDATA, used to carry zone serials and timers in DNS zone transfers. [#1675](https://github.com/ocsf/ocsf-schema/pull/1675)
+  1. Added `physical_site` object describing a physical site as defined by the reporting organization (`uid`, `name`) and the location within it (`building`, `floor`, `site_zone`). [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+  1. Added `site_zone` object describing a defined area within a physical site that shares a common security posture, distinct from the network `zone` attribute. It reuses `type_id` with an object-scoped enum: Unknown (0), Perimeter (1), Public (2), Restricted (3), Critical (4), Transitional (5), External (6), Other (99), with `type` as its sibling. [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+* #### Observables
+* #### Platform Extensions
+  1. Added `token_elevation_type` and `token_elevation_type_id` to the Windows extension dictionary and to the Windows `process` object, for the User Account Control elevation type of the process token. [#1788](https://github.com/ocsf/ocsf-schema/pull/1788)
+* #### Dictionary Attributes
+  1. Added `additional_firewall_rules` as an array of `firewall_rule_evaluation` objects. [#1786](https://github.com/ocsf/ocsf-schema/pull/1786)
+  1. Added `likelihood` as a `string_t`, normalized to the caption of `likelihood_id`. [#1715](https://github.com/ocsf/ocsf-schema/pull/1715)
+  1. Added `likelihood_id` as an `integer_t` enum with values Unknown (0), Very Low (1), Low (2), Moderate (3), High (4), Very High (5), Other (99). [#1715](https://github.com/ocsf/ocsf-schema/pull/1715)
+  1. Added `likelihood_score` as an `integer_t`, complementing `confidence_score`, `impact_score`, and `risk_score`. [#1715](https://github.com/ocsf/ocsf-schema/pull/1715)
+  1. Added `ai_capability`, `transport`/`transport_id`, `is_destructive`, `is_idempotent`, `is_open_world`, `input_schema_fingerprint`, `output_schema_fingerprint`, `desc_fingerprint`, `baseline_fingerprint`, `cache_scope`/`cache_scope_id`, `cache_ttl`, and `task_uid` attributes for the `ai_capability` object. [#1729](https://github.com/ocsf/ocsf-schema/pull/1729)
+  1. Added `is_declared_incident` and `resolved_time`. [#1740](https://github.com/ocsf/ocsf-schema/pull/1740)
+  1. Added `progress_current`, `progress_total`, `progress_unit`, `progress_unit_id`, `bytes_processed`, `bytes_written`, `throughput` and `queue_name` attributes. [#1722](https://github.com/ocsf/ocsf-schema/pull/1722)
+  1. Added `log_facility` and `log_facility_id` attributes. [#1720](https://github.com/ocsf/ocsf-schema/pull/1720)
+  1. Added `shannon_entropy` as a `float_t`. [#1771](https://github.com/ocsf/ocsf-schema/pull/1771)
+  1. Added `icmp_type`, `icmp_code` and `icmp_uid` attributes. [#1719](https://github.com/ocsf/ocsf-schema/pull/1719)
+  1. Added `audience` as a `string_t`, with `source` set to the `aud` claim and a reference to RFC 7519. [#1705](https://github.com/ocsf/ocsf-schema/pull/1705)
+  1. Added `ai_status`, `permission_result`, `permission_result_id`, `stop_reason`, and `stop_reason_id` attributes. [#1704](https://github.com/ocsf/ocsf-schema/pull/1704)
+  1. Added `access_point_status`, `access_point_status_id`, `band`, `band_id`, `bssid`, `channel_number`, `data_rate`, `is_access_point_on_wired_network`, `noise_floor`, `security_protocol`, `security_protocol_id`, `signal_noise_ratio`, `signal_strength`, `ssid`, `standard` and `wifi` attributes. [#1721](https://github.com/ocsf/ocsf-schema/pull/1721)
+  1. Added `dns_zone`, `dns_additional`, `soa`, `updated_soa`, `num_records`, `transfer_type`, `transfer_type_id`, and the SOA sub-fields `primary_server`, `responsible_party`, `sequence_number`, `refresh_interval`, `retry_interval`, `expire_interval`, and `minimum_ttl` for DNS zone transfers. [#1675](https://github.com/ocsf/ocsf-schema/pull/1675)
+  1. Added `data_bytes`, `data_bytes_in` and `data_bytes_out` attributes. [#1775](https://github.com/ocsf/ocsf-schema/pull/1775)
+  1. Added `received_time`. [#1800](https://github.com/ocsf/ocsf-schema/pull/1800)
+  1. Added `preauth_type` and `preauth_type_id` attributes. [#1791](https://github.com/ocsf/ocsf-schema/pull/1791)
+  1. Added `is_privileged` as a `boolean_t`. [#1805](https://github.com/ocsf/ocsf-schema/pull/1805)
+  1. Added `session_key_encryption_details` as an `encryption_details` object. [#1808](https://github.com/ocsf/ocsf-schema/pull/1808)
+  1. Added `is_elevated` as a `boolean_t`. [#1809](https://github.com/ocsf/ocsf-schema/pull/1809)
+  1. Added `is_hidden` as a `boolean_t`. [#1792](https://github.com/ocsf/ocsf-schema/pull/1792)
+  1. Added `call_stack` as an array of `string_t`. [#1794](https://github.com/ocsf/ocsf-schema/pull/1794)
+  1. Added `terminating_signal` and `terminating_signal_id` attributes, with the POSIX signals whose default action is to terminate the process. [#1793](https://github.com/ocsf/ocsf-schema/pull/1793)
+  1. Added `building` and `floor` as `string_t` physical site attributes. [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+  1. Added `physical_site` and `site_zone` as object attributes and `is_armed` as a `boolean_t`. [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+
+### Improved
+* #### Categories
+* #### Event Classes
+  1. Added `likelihood`, `likelihood_id`, and `likelihood_score` as optional attributes in the `context` group on `Detection Finding` (class 2004). [#1715](https://github.com/ocsf/ocsf-schema/pull/1715)
+  1. Added `is_declared_incident` and `resolved_time` to `Incident Finding` (class 2005), and clarified the `time` description in the `Finding` base class. [#1740](https://github.com/ocsf/ocsf-schema/pull/1740)
+  1. Overrode the `ai_operation` profile's `ai_agent` description on `Application Lifecycle` (class 6002) to clarify that it represents the affected application when that application is itself an AI agent. [#1751](https://github.com/ocsf/ocsf-schema/pull/1751)
+  1. Clarified `ai_agent` description in `role_management` to identify the agent that `iam_role` is provisioned for or bound to, rather than the actor-oriented wording inherited from the `ai_operation` profile. Noted in the class description that `role_management` covers roles bound to AI agents. [#1726](https://github.com/ocsf/ocsf-schema/pull/1726)
+  1. Moved the `risk_*` attributes from `data_security_finding` and `detection_finding` up to `finding`. [#1811](https://github.com/ocsf/ocsf-schema/pull/1811)
+  1. Added `List` (5) to the `activity_id` enum of `API Activity` (class 6003), for calls that enumerate a collection of resources. [#1816](https://github.com/ocsf/ocsf-schema/pull/1816)
+  1. Added `terminating_signal` and `terminating_signal_id` to `Process Activity` (class 1007) for the signal that terminated the target process, or that the actor sent to terminate it. Complements `exit_code`. [#1793](https://github.com/ocsf/ocsf-schema/pull/1793)
+  1. Mentioned writes to `/proc/[pid]/mem` on Linux in the description of the `Write` activity in `Memory Activity` (class 1004), with a reference to proc_pid_mem(5). [#1806](https://github.com/ocsf/ocsf-schema/pull/1806)
+* #### Profiles
+  1. Added optional `additional_firewall_rules` to the `security_control` profile for other reported security control rule evaluations and their individual actions and dispositions. Clarified the profile's event-level action and disposition, attribution through `firewall_rule`, and distinction from additional rule evaluations. [#1786](https://github.com/ocsf/ocsf-schema/pull/1786)
+  1. Added `ai_status` (optional) to the `ai_operation` profile in the `context` group, grouping per-operation outcome scalars (stop reason and permission check result) so they do not proliferate at the event root. [#1704](https://github.com/ocsf/ocsf-schema/pull/1704)
+  1. Added `is_declared_incident` to incident.json. [#1740](https://github.com/ocsf/ocsf-schema/pull/1740)
+* #### Objects
+  1. Changed `endpoint.mac` from optional to recommended and added it to the identity constraints of `endpoint` and `network_endpoint`. [#1801](https://github.com/ocsf/ocsf-schema/pull/1801)
+  1. Added `labels` to the `node` object for grouping nodes into named subgraphs. [#1715](https://github.com/ocsf/ocsf-schema/pull/1715)
+  1. Added the missing `"extends": "object"` to the `analysis_target`, `anomaly_analysis`, `query_evidence` and `startup_item` objects, so they inherit from the `object` base like other objects. [#1803](https://github.com/ocsf/ocsf-schema/pull/1803)
+  1. Broadened the `firewall_rule` caption and descriptions to Security Control Rule, covering rules evaluated by firewalls and other security controls. [#1786](https://github.com/ocsf/ocsf-schema/pull/1786)
+  1. Added `progress_current`, `progress_total`, `progress_unit`, `progress_unit_id`, `bytes_processed`, `bytes_written`, `throughput` and `queue_name` to the `job` object so a running job can report its progress and throughput. [#1722](https://github.com/ocsf/ocsf-schema/pull/1722)
+  1. Added `created_time`, `first_seen_time`, `last_seen_time`, `modified_time`, `src_url`, and `criticality_id` attributes to the `application` object. [#1683](https://github.com/ocsf/ocsf-schema/pull/1683)
+  1. Added `resolved_time` to the `finding_info` object, and changed its `created_time` from optional to recommended. [#1740](https://github.com/ocsf/ocsf-schema/pull/1740)
+  1. Added `query_info` to the `finding_info` object for the search behind the `related_events` in the finding. [#1744](https://github.com/ocsf/ocsf-schema/pull/1744)
+  1. Added `finding_info` to the `related_events` object for cases where the related event is a finding. [#1744](https://github.com/ocsf/ocsf-schema/pull/1744)
+  1. Added `raw_data` to the `related_events` object to optionally carry the full event as a string. [#1744](https://github.com/ocsf/ocsf-schema/pull/1744)
+  1. Added `risk_details`, `risk_level_id`, `risk_level`, `risk_score` to `related_events` to carry any risk values when the related event is a finding. [#1744](https://github.com/ocsf/ocsf-schema/pull/1744)
+  1. Added `type_id`, `type` to `related_events` to distinguish activities, alerts, or findings as the type of the related event. [#1744](https://github.com/ocsf/ocsf-schema/pull/1744)
+  1. Added `log_facility` and `log_facility_id` to the `metadata` and `logger` objects. [#1720](https://github.com/ocsf/ocsf-schema/pull/1720)
+  1. Added `shannon_entropy` to the `file` object to carry the Shannon entropy of the file content. [#1771](https://github.com/ocsf/ocsf-schema/pull/1771)
+  1. Added `icmp_type`, `icmp_code` and `icmp_uid` to the `network_connection_info` object. [#1719](https://github.com/ocsf/ocsf-schema/pull/1719)
+  1. Added `data_bytes`, `data_bytes_in` and `data_bytes_out` to the `network_traffic` object, counting the data carried by the Layer 4 (Transport Layer) protocol, excluding the IP and transport headers, and clarified that its `bytes`, `bytes_in`, `bytes_out` and `bytes_missed` count bytes in Layer 3 (Network Layer) packets, including IP header and payload. [#1775](https://github.com/ocsf/ocsf-schema/pull/1775)
+  1. Added per-node authority attributes `scopes`, `audience`, and `expiration_time` to the `delegation` object, so each hop in the chain of authority records what was granted, for whom, and until when. [#1705](https://github.com/ocsf/ocsf-schema/pull/1705)
+  1. Added `wifi` to the `network_endpoint` and `network_interface` objects. Resolves #1463. [#1721](https://github.com/ocsf/ocsf-schema/pull/1721)
+  1. Added `is_elevated` to the `session` object, for a session running with elevated privileges such as a Windows elevated token. [#1809](https://github.com/ocsf/ocsf-schema/pull/1809)
+  1. Added `value` to the `digital_signature` object so an event can carry the signature bytes themselves, not only a description of them - the raw signature output of `algorithm_id`, encoded as standard Base64 (RFC 4648 §4). [#1709](https://github.com/ocsf/ocsf-schema/pull/1709)
+  1. Added `RC4 (7)` enum value to `algorithm_id` in the `encryption_details` object, so Kerberos tickets encrypted with RC4 can be normalized. [#1787](https://github.com/ocsf/ocsf-schema/pull/1787)
+  1. Added `session_key_encryption_details` to the `authentication_token` object, for the encryption type of a Kerberos ticket session key, reported separately from the ticket encryption. [#1808](https://github.com/ocsf/ocsf-schema/pull/1808)
+  1. Added `desc` to the `trait` object to carry a human-readable description of the trait. [#1797](https://github.com/ocsf/ocsf-schema/pull/1797)
+  1. Added `received_time` to the `metadata` and `logger` objects. [#1800](https://github.com/ocsf/ocsf-schema/pull/1800)
+  1. Added `preauth_type` and `preauth_type_id` to the `authentication_token` object for the method the client used to pre-authenticate, such as the Kerberos pre-authentication type. [#1791](https://github.com/ocsf/ocsf-schema/pull/1791)
+  1. Added optional `uuid` to the `ai_agent` object, a universally unique agent identifier for correlating the same agent across sources that do not share an authoritative source for `uid`. [#1810](https://github.com/ocsf/ocsf-schema/pull/1810)
+  1. Added `is_privileged` to the `container` object to indicate a container running in privileged mode. [#1805](https://github.com/ocsf/ocsf-schema/pull/1805)
+  1. Added `is_hidden` to the `file` object, alongside `is_system` and `is_readonly`, to indicate a hidden file or directory. [#1792](https://github.com/ocsf/ocsf-schema/pull/1792)
+  1. Added `call_stack` to the `process` object for the call stack of the thread identified by `tid` at the time of the activity, for example the thread that opened or injected into another process. [#1794](https://github.com/ocsf/ocsf-schema/pull/1794)
+  1. Clarified in the `metadata` object which value `received_time` matches when the first logger records no separate `received_time`, and stated `total_queued_duration` as `logged_time` minus `processed_time`. [#1821](https://github.com/ocsf/ocsf-schema/pull/1821)
+  1. Added `physical_site` to the `location` object's `at_least_one` constraint, so a location that carries only physical site context validates when the `physical_site` profile is applied. [#1750](https://github.com/ocsf/ocsf-schema/pull/1750)
+* #### Observables
+* #### Platform Extensions
+* #### Dictionary Attributes
+  1. Added `Ptrace (4)` to the `injection_type_id` enum, for code injection on Linux through the process trace system call. [#1806](https://github.com/ocsf/ocsf-schema/pull/1806)
+  1. Added `Sub-Agent Stop (6)` to the `stop_reason_id` enum, for a completion that ended because the sub-agent performing it was stopped. [#1780](https://github.com/ocsf/ocsf-schema/pull/1780)
+  1. Broadened the `firewall_rule` caption and description to Security Control Rule while preserving its attribution to the event-level action or disposition. [#1786](https://github.com/ocsf/ocsf-schema/pull/1786)
+
+### Bugfixes
+1. Added `ai_agent` to the core and Windows `evidences` objects' `at_least_one` constraints so evidence containing only an AI agent satisfies the constraint. [#1796](https://github.com/ocsf/ocsf-schema/pull/1796)
+1. Changed the `account` requirement in the `user` object from optional to recommended to align with its participation in the `at_least_one` constraint. [#1766](https://github.com/ocsf/ocsf-schema/pull/1766)
+1. Changed optional attributes that participate in an `at_least_one` or `just_one` constraint to `recommended`, and replaced the undefined `log_file` constraint member on `event_log_activity` with `file`. [#1767](https://github.com/ocsf/ocsf-schema/pull/1767)
+1. Escaped the dots between IPv4 octets in the `ip_t` regex (IPv4 and IPv4-embedded IPv6 forms), which matched any character, so `192x168x1x1` validated as an IP address. Raised `ip_t` `max_len` from 40 to 45 so the longest form the regex accepts (`0000:0000:0000:0000:0000:ffff:192.168.100.200`) fits. [#1769](https://github.com/ocsf/ocsf-schema/pull/1769)
+1. Moved the literal `-` to the end of the `email_t` local-part character class. As `+-/` it formed a range that also admitted a comma, so `a,b@example.com` validated. [#1769](https://github.com/ocsf/ocsf-schema/pull/1769)
+1. Widened the `datetime_t` regex to accept a space between the date and the time, as RFC 3339 section 5.6 permits and as the type's own `2024-09-10 23:20:50.520789Z` example uses. [#1769](https://github.com/ocsf/ocsf-schema/pull/1769)
+1. Corrected the `uuid_t` description example, which had 11 hex digits in its last group and failed its own regex. Fixed the `file_hast_t` typo in `file_hash_t` and a repeated "For example:" in `file_path_t`. [#1768](https://github.com/ocsf/ocsf-schema/pull/1768)
+1. Corrected the `type_uid` example in the `observable` object: Network Activity is class_uid 4001 (type_uid 400101), not 3001. [#1768](https://github.com/ocsf/ocsf-schema/pull/1768)
+1. Removed `source` from `src_url` in the `d3f_tactic` and `d3f_technique` objects. It held an example URL that `references` already cites, not the attribute's name in an originating standard. [#1812](https://github.com/ocsf/ocsf-schema/pull/1812)
+
+### Deprecated
+
+### Breaking changes
+
+### Misc
+  1. Compare compatibility CI with the `1.9.0` tag, align GitHub Action versions, and require a `Signed-off-by` trailer on pull request commits. Spellcheck stays a warning. [#1776](https://github.com/ocsf/ocsf-schema/pull/1776)
+  1. Read the text block from the description-review response. `claude-sonnet-5-5` returns a thinking block first, and the reviewer crashed on `content[0].text`. [#1776](https://github.com/ocsf/ocsf-schema/pull/1776)
+  1. Added the `@recursive` attribute annotation to the metaschema, letting an attribute declare that expanding it reenters a type already on the path, with an optional nesting `limit` and, for indirect recursion, the `path` that closes the cycle. No schema definitions are annotated yet. [#1762](https://github.com/ocsf/ocsf-schema/pull/1762)
+  1. New Extension registration for Yandex Cloud. [#1759](https://github.com/ocsf/ocsf-schema/pull/1759)
+  1. New Extension registration for WithSecure. [#1773](https://github.com/ocsf/ocsf-schema/pull/1773)
+  1. New Extension registration for ZeroSOC. [#1785](https://github.com/ocsf/ocsf-schema/pull/1785)
+  1. Changelog entries now go in `changelog.d/<PR number>.md`, one file per pull request, and are merged into CHANGELOG.md when a release is prepared, so pull requests no longer conflict over CHANGELOG.md. A new Changelog check requires the file on pull requests that change the schema. [#1813](https://github.com/ocsf/ocsf-schema/pull/1813)
+  1. The Changelog check now fails a pull request that changes the schema and edits CHANGELOG.md, instead of warning, and runs on pull requests opened before changelog files existed. [#1822](https://github.com/ocsf/ocsf-schema/pull/1822)
+  1. CI: renamed workflows and checks to say what they check, removed the unused server validation workflow, updated the GitHub Actions to their current major versions, aligned Python versions, and gave every workflow a timeout and cancellation of superseded pull request runs. [#1823](https://github.com/ocsf/ocsf-schema/pull/1823)
+  1. Added a formatter for the schema JSON files (`.github/scripts/format_schema.py`), a CI check that runs it, and a recommended pre-commit config. A class or object's `profiles` list now comes before `attributes`, and the reformatted files keep the same values. Every file now ends with a newline, and CI checks that it stays that way. [#1825](https://github.com/ocsf/ocsf-schema/pull/1825)
+  1. CI: the compatibility check's baseline release and the `ocsf-lib` and `ocsf-validator` versions are set in the workflows instead of repository variables. [#1826](https://github.com/ocsf/ocsf-schema/pull/1826)
+  1. Added `.github/scripts/release.py` for release maintainers. `prep` builds the changelog, sets the release version and updates the spellcheck word list, holding back likely typos. `next` sets the next `-dev` version and moves the backwards compatibility baseline to the release. [#1835](https://github.com/ocsf/ocsf-schema/pull/1835)
+
+## [v1.9.0] - Aug 3rd, 2026
+
+### Added
+* #### Categories
+* #### Event Classes
+  1. Added `user_management` and `role_management`. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+  1. Added `clipboard_activity`. [#1655](https://github.com/ocsf/ocsf-schema/pull/1655)
+  1. Added `device_power_state_activity` class to capture power state changes of a device. [#1624](https://github.com/ocsf/ocsf-schema/pull/1624)
+* #### Profiles
+  1. Added `record_integrity` profile that adds a cryptographic `attestation` over the event (integrity, authenticity, and non-repudiation), applied at the base event so any class can carry it. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added optional `delegation` attribute to the `ai_operation` profile, linking data-plane actions to the delegated authority under which they were performed. [#1665](https://github.com/ocsf/ocsf-schema/pull/1665)
+* #### Objects
+  1. Added `delegation` object describing a durable authorization context issued by a principal to a delegate. [#1665](https://github.com/ocsf/ocsf-schema/pull/1665)
+  1. Added `job_action` object to describe an action that job can perform. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `job_trigger` object to describe a condition when job performs its action. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `cpu_info` object for CPUs (array name `cpu_info_list`). [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+  1. Added `iam_role` object for user, role and group management. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+  1. Added `clipboard` and `clipboard_item` object for clipboard activity. [#1655](https://github.com/ocsf/ocsf-schema/pull/1655)
+  1. Added `dns_resource_record` object to represent an RFC 1035 resource record, used across Answer, Authority, and Additional sections. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Added `dns_section` object to represent a DNS message section containing supplementary resource records and an optional TSIG record. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Added `tsig` object to represent a TSIG (Transaction Signature) record with structured fields for security analytics: `algorithm`, `key_name`, `error_id`, and `error`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Added `download_info` object with information pertaining to a downloaded file. [#1658](https://github.com/ocsf/ocsf-schema/pull/1658)
+  1. Added `note` object to capture a comment along with the user who made the comment and when the note was modified. [#1670](https://github.com/ocsf/ocsf-schema/pull/1670)
+  1. Added `ai_agent` object representing an autonomous AI agent, distinct from the existing `agent` object (which models security sensors such as EDR, DLP, APM). [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `attestation` object carrying a `fingerprint` of and digital `signatures` over an event, with optional tamper-evident chain attributes (`prev_event`, `chain_uid`) and an `authority_uid` identifying the attesting party. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added `prev_event` object referencing the previous event in a tamper-evident chain by its `fingerprint` (content binding) together with `uid` and `type_uid` (retrieval). [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added `sensor_info` object including the `sensor_layer_id` and related attributes. [#1703](https://github.com/ocsf/ocsf-schema/pull/1703)
+* #### Observables
+  1. Set `iam_role.name` (49) & `iam_role.uid` (50) as Observable types. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+* #### Platform Extensions
+* #### Dictionary Attributes
+  1. Added `attestation_list`, `prev_event`, `authority_uid`, and `chain_uid` attributes for the `record_integrity` profile. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added `com_class_uuid` attribute to reflect Class Identifier of a Component Object Model. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `event_codes` that is a set of event identifiers. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `log_sources` that is a set of log systems. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `job_actions` that describes a set of actions that job can perform. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `job_triggers` that describes a set of conditions when job performs its actions. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `updated_job` that reflects the attempted or the actual updated job. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `properties` that is a set of characteristics associated with an entity. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `speed_mhz` for compute unit clock speed in MHz. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+  1. Added `cpu_info_list` as an array of `cpu_info` objects. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+  1. Added `iam_role`, `iam_roles`, `updated_role`, `updated_group`, `updated_user` attributes. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+  1. Added `updated_entity`, `updated_resources`, and `updated_web_resources` attributes for reporting intended or actual post-update state. [#1618](https://github.com/ocsf/ocsf-schema/pull/1618)
+  1. Added `initiator` and `initiator_id` attributes for identifying which endpoint initiated a network communication, with generic `Unknown (0)` and `Other (99)` enums. [#1598](https://github.com/ocsf/ocsf-schema/pull/1598)
+  1. Added `transaction_id`, `query_additional`, `response_additional`, `authority`, and `key_name` dictionary attributes for DNS Activity restructuring. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Added `peripheral_devices` for a set of peripherals. [#1645](https://github.com/ocsf/ocsf-schema/pull/1645)
+  1. Added `serialization` and `serialization_id` attributes to record the canonical serialization or signing-envelope scheme used to produce the signed bytes. [#1662](https://github.com/ocsf/ocsf-schema/pull/1662)
+  1. Added `binary_data`, `contents`, `clipboard_native_type`, `string_data`. [#1655](https://github.com/ocsf/ocsf-schema/pull/1655)
+  1. Added `uid_numeric` attribute to enable a unique identifier that is numeric to be represented natively using the `long_t` data type. [#1643](https://github.com/ocsf/ocsf-schema/pull/1643)
+  1. Added `download_info` attribute to `file` object. [#1658](https://github.com/ocsf/ocsf-schema/pull/1658)
+  1. Added `notes` attribute as an array of `Note` objects. [#1670](https://github.com/ocsf/ocsf-schema/pull/1670)
+  1. Added `prompt_text` and `response_text` attributes for capturing the input prompt text and model response text of an AI message. [#1674](https://github.com/ocsf/ocsf-schema/pull/1674)
+  1. Added `ai_agent` attribute referencing the new `ai_agent` object. [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `hosted_ai_agent_list` attribute for enumerating AI agents hosted by a process or other runtime. [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `charter` attribute (file type) for documents defining the role, scope, and operating bounds of an entity. [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `criticality_id` dictionary attribute with a four-level criticality enum `Low (1)`, `Medium (2)`, `High (3)`, and `Very High (4)`, plus generic `Unknown (0)` and `Other (99)` enums, paired with the existing `criticality` sibling. [#1693](https://github.com/ocsf/ocsf-schema/pull/1693)
+  1. Added `sensor_layer_id` and `sensor_layer` sibling. [#1703](https://github.com/ocsf/ocsf-schema/pull/1703)
+  1. Added `sensor_info_list` as an array of type `sensor_info` for the `analytic` object. [#1703](https://github.com/ocsf/ocsf-schema/pull/1703)
+  1. Added `delegation` and `issuer_uid` attributes supporting the `delegation` object and `ai_operation` profile. [#1665](https://github.com/ocsf/ocsf-schema/pull/1665)
+
+### Improved
+* #### Categories
+* #### Event Classes
+  1. Added `updated_job` in `Scheduled Job Activity` class to reflect the actual or attempted state of the job upon update activity. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `iam_role` and role management support to `group_management`, `authorize_session`. Filled out the `group_management` class with complete lifecycle as well as added `resources`, `policies` to the discrete activities. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+  1. Added `updated_*` attributes to `Entity Management` and `Web Resources Activity` for class-specific update result reporting. [#1618](https://github.com/ocsf/ocsf-schema/pull/1618)
+  1. Added `initiator_id` and `initiator` to `Network Activity` with network-specific enums `Source Endpoint (1)` and `Destination Endpoint (2)`, and updated `src_endpoint` and `dst_endpoint` descriptions to reflect bi-flow and asymmetric flow scenarios. [#1598](https://github.com/ocsf/ocsf-schema/pull/1598)
+  1. Added `transaction_id`, `opcode_id`/`opcode`, `flag_ids`/`flags`, `authority`, `query_additional`, and `response_additional` to `DNS Activity`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Extended `activity_id` attribute in `HTTP Activity` to cover all methods in IANA HTTP Method Registry. [#1654](https://github.com/ocsf/ocsf-schema/pull/1654)
+  1. Added `users` to `group_management` to replace deprecated `user`. [#1666](https://github.com/ocsf/ocsf-schema/pull/1666)
+  1. Added `application` attribute to `Application Lifecycle` to replace the deprecated `app` attribute, resolving the mismatch where `app` (captioned "Application") was typed as the `product` object. [#1702](https://github.com/ocsf/ocsf-schema/pull/1702)
+  1. Added `notes` to `finding` and `incident_finding`. [#1670](https://github.com/ocsf/ocsf-schema/pull/1670)
+  1. Added `resources` to `finding` for consistency and referencing within the class. [#1670](https://github.com/ocsf/ocsf-schema/pull/1670)
+  1. Added the `ai_operation` profile to the `system`, `network`, `application`, and `iam` base event classes so all System Activity, Network Activity, Application Activity, and Identity & Access Management events inherit agent attribution. Also added the profile to `email_activity` (which does not extend a base with the profile). [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added the `record_integrity` profile to the `base_event` class so every event class can optionally carry a cryptographic `attestation` over the event. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+* #### Profiles
+  1. Added `ai_agent` attribute to the `ai_operation` profile. [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+* #### Objects
+  1. Added `job_actions` array of objects to the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `job_triggers` array of objects to the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `type_id` attribute to the `job` object to describe mechanism that executes the job. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Extended `run_state_id` attribute with `Disabled (5)` in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `uid` attribute to the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Relaxed `name` attribute constraint to `recommended` in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Added `at_least_one` constraint for `name` and `type_id` attributes in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+  1. Updated `cpu_count` description in `device_hw_info` to cross-reference `cpu_info_list`. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+  1. Updated `gpu_count` and `gpu_info_list` descriptions in `device_hw_info` to cross-reference each other. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+  1. Added `bcc` attribute to the `email` object. [#1632](https://github.com/ocsf/ocsf-schema/pull/1632)
+  1. Added `bcc_mailboxes` attribute to the `email` object. [#1632](https://github.com/ocsf/ocsf-schema/pull/1632)
+  1. Added `iam_role` to `actor`. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+  1. `dns_answer` now extends `dns_resource_record` so it inherits the RFC 1035 resource record fields (`class`, `hostname`, `rdata`, `ttl`, `type`); `flag_ids` and `flags` remain locally on `dns_answer` and are deprecated in favor of the corresponding attributes on `DNS Activity`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Removed the abstract `_dns` object; `class`, `type`, and the deprecated `packet_uid` attribute now live directly on `dns_query`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+  1. Added `peripheral_devices` to `device`. [#1645](https://github.com/ocsf/ocsf-schema/pull/1645)
+  1. Added `serialization` and `serialization_id` to the `digital_signature` object to record the canonical signing input (JCS, JWS, COSE, DSSE, Authenticode). [#1662](https://github.com/ocsf/ocsf-schema/pull/1662)
+  1. Added `encoding` and `encoding_id` to the `fingerprint` object to record how the raw hash bytes are represented as the `value` string (Hex, Base64, Base64URL). [#1684](https://github.com/ocsf/ocsf-schema/pull/1684)
+  1. Added `uid_numeric` to `_entity` so that a numeric `uid` value can be represented natively. [#1643](https://github.com/ocsf/ocsf-schema/pull/1643)
+  1. Extended `http_method` attribute in the `http_request` object to cover all methods in IANA HTTP Method Registry. [#1654](https://github.com/ocsf/ocsf-schema/pull/1654)
+  1. Added `prompt_text` and `response_text` attributes to the `message_context` object, complementing the existing `prompt_tokens` and `completion_tokens` metrics with the verbatim prompt and response text. [#1674](https://github.com/ocsf/ocsf-schema/pull/1674)
+  1. Added `Code Signing (5)` enum value to `algorithm_id` and `Code Signing (7)` enum value to `serialization_id` in the `digital_signature` object. [#1668](https://github.com/ocsf/ocsf-schema/pull/1668)
+  1. Removed `Microsoft` from descriptions in `algorithm_id` and `serialization_id` in the `digital_signature` object. [#1668](https://github.com/ocsf/ocsf-schema/pull/1668)
+  1. Added `ai_agent` attribute to the `evidences` object so detections involving multiple AI agents, such as an agent spawning a sub-agent in violation of usage policy, can be captured as separate evidence entries. [#1681](https://github.com/ocsf/ocsf-schema/pull/1681)
+  1. Added `ai_agent` to `process`. Added `hosted_ai_agent_list` to `process` for cases where a process hosts multiple agents that cannot be individually attributed. [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `charter` attribute to `ai_agent` for the agent's durable role definition document (system prompt or constitution). [#1641](https://github.com/ocsf/ocsf-schema/pull/1641)
+  1. Added `product` attribute to the `application` object so an application can carry the identity of the software product it is an instance of (vendor, CPE, canonical version). [#1702](https://github.com/ocsf/ocsf-schema/pull/1702)
+  1. Added `application` attribute to the `actor` object to replace the deprecated `app_name`/`app_uid` scalars with the richer `application` object for the client application or service that initiated the activity. [#1702](https://github.com/ocsf/ocsf-schema/pull/1702)
+  1. Added `App Package (6)` enum value to `algorithm_id` and `App Package (8)` enum value to `serialization_id` in the `digital_signature` object. [#1692](https://github.com/ocsf/ocsf-schema/pull/1692)
+  1. Added `serialization` and `serialization_id` to the `fingerprint` object, mirroring `digital_signature`, so a verifier knows the canonical serialization scheme used to produce the fingerprinted byte sequence. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added `Flat (1)` enum value to `serialization_id` in the `digital_signature` and `fingerprint` objects for flat hashes or signatures over a raw byte sequence; the later `serialization_id` values shift up by one (`JCS (2)` through `App Package (8)`), keeping the two enums identical. [#1661](https://github.com/ocsf/ocsf-schema/pull/1661)
+  1. Added `rule` attribute to `discovery_details`. [#1706](https://github.com/ocsf/ocsf-schema/pull/1706)
+  1. Added `sensor_info_list` to the `analytic` object. [#1703](https://github.com/ocsf/ocsf-schema/pull/1703)
+* #### Observables
+* #### Platform Extensions
+  1. Added `prev_win_service` attribute to Windows Service Activity Class in order to store previous state of the Windows service. [#1663](https://github.com/ocsf/ocsf-schema/pull/1663)
+  1. Improved `activity_id` description and descriptions for its enum values in Windows Service Activity Class. [#1663](https://github.com/ocsf/ocsf-schema/pull/1663)
+  1. Added "See specific usage" to `win_service` description in Windows extension dictionary. [#1663](https://github.com/ocsf/ocsf-schema/pull/1663)
+* #### Dictionary Attributes
+  1. Improved `job` object description to describe cases beyond System Activity class.
+
+### Bugfixes
+1. Fixed the static anti-pattern checker so dictionary attributes are analyzed with the full compiled dictionary; the `missing-sibling` rule no longer false-positives when the sibling exists in `dictionary.json`. [#1613](https://github.com/ocsf/ocsf-schema/pull/1613)
+1. Added `tunnel_type_id` enum values to `dictionary.json` to resolve the anti-pattern of missing enums in the dictionary attribute. [#1602](https://github.com/ocsf/ocsf-schema/pull/1602)
+1. Fixed `rcode_id` enum value 16 caption from `BADSIG_VERS` to `BADVERS` in `DNS Activity`. Code 16 in the DNS header RCODE space is specifically Bad EDNS OPT Version; BADSIG belongs in the TSIG error field. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+1. Fixed bad URLs to ASTM F3411-22a in `drone_flights_activity` event class and `unmanned_aerial_system` object. [#1676](https://github.com/ocsf/ocsf-schema/pull/1676)
+
+### Deprecated
+1. Deprecated `is_src_dst_assignment_known` dictionary attribute and its usage in `Network Activity` in favour of `initiator_id`. [#1598](https://github.com/ocsf/ocsf-schema/pull/1598)
+1. Deprecated `message` attribute in the `http_response` object. The `code` and `status` attributes already convey the HTTP status code and reason phrase. [#1616](https://github.com/ocsf/ocsf-schema/pull/1616)
+1. Deprecated `entity_result`, `resources_result`, and `web_resources_result` in favor of the corresponding `updated_*` attributes. [#1618](https://github.com/ocsf/ocsf-schema/pull/1618)
+1. Deprecated `resource` in `Group Management` in favor of `resources`. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+1. Deprecated usage of `cmd_line` attribute in favor of `job_actions.cmd_line` in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+1. Deprecated usage of `last_run_time` attribute in favor of `job_triggers.last_run_time` in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+1. Deprecated usage of `next_run_time` attribute in favor of `job_triggers.next_run_time` in the `job` object. [#1597](https://github.com/ocsf/ocsf-schema/pull/1597)
+1. Deprecated `packet_uid` attribute in `dns_query` object in favor of `transaction_id` on `DNS Activity`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+1. Deprecated the `app` dictionary attribute (captioned "Application" but typed as the `product` object) and its usage in `Application Lifecycle`, in favor of the `application` attribute. [#1702](https://github.com/ocsf/ocsf-schema/pull/1702)
+1. Deprecated the `app_name` and `app_uid` usages in the `actor` object in favor of the `application` attribute. (The `app_name` usage in `Network` is unchanged - there it is a DPI/NBAR traffic classification label, not an application entity.) [#1702](https://github.com/ocsf/ocsf-schema/pull/1702)
+1. Deprecated `opcode` and `opcode_id` attributes in `dns_query` object in favor of `opcode`/`opcode_id` on `DNS Activity`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+1. Deprecated `flag_ids`, `flags`, and `packet_uid` attributes in `dns_answer` object in favor of `flag_ids`/`flags`/`transaction_id` on `DNS Activity`. [#1634](https://github.com/ocsf/ocsf-schema/pull/1634)
+1. Deprecated the `account_change` and `user_access_management` classes in favor of the `user_management` class. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+1. Deprecated the `user_result` attribute in favor of the `updated_user` attribute. [#1603](https://github.com/ocsf/ocsf-schema/pull/1603)
+1. Deprecated `cpu_cores` in the dictionary in favor of `cores`. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+1. Deprecated `cpu_speed` in the dictionary in favor of `speed_mhz`. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+1. Deprecated `cpu_type` in the dictionary in favor of `model` and `vendor_name` within `cpu_info_list[*]`. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+1. Deprecated `cpu_architecture`, `cpu_architecture_id`, `cpu_bits`, `cpu_cores`, `cpu_speed`, and `cpu_type` on `device_hw_info` in favor of their equivalents within `cpu_info_list[*]`. [#1630](https://github.com/ocsf/ocsf-schema/pull/1630)
+1. Deprecated the `user` attribute in the `group_management` class in favor of `users`. [#1666](https://github.com/ocsf/ocsf-schema/pull/1666)
+1. Deprecated the `comment` attribute in the `finding` class and its extended classes, and the `incident_finding` class in favor of `notes`. [#1670](https://github.com/ocsf/ocsf-schema/pull/1670)
+
+### Misc
+1. Added static anti-pattern detection, LLM-to-static learning pipeline, and deprecated attribute filtering to the automated PR review workflows. [#1599](https://github.com/ocsf/ocsf-schema/pull/1599)
+1. Added `references` and `@deprecated` support to the profile metaschema, aligning it with event class and object metaschemas. [#1625](https://github.com/ocsf/ocsf-schema/pull/1625)
+1. Updated all dictionary attributes, event classes, and objects where descriptions contained embedded authoritative URLs, and moved them to `references` sections, keeping the normative schema descriptions free from required URLs. [#1676](https://github.com/ocsf/ocsf-schema/pull/1676)
+1. Added a required, machine-readable `superseded_by` field to the `@deprecated` annotation and backfilled all 126 existing deprecations (dictionary attributes, class/object/profile attributes, whole classes and objects, and enum values) with resolved replacement references; an empty array denotes removal with no replacement. Normalized deprecation messages to name replacements by their actual names in `<code>` tags. [#1707](https://github.com/ocsf/ocsf-schema/pull/1707)
+1. New Extension registration for Trellix [#1701](https://github.com/ocsf/ocsf-schema/pull/1701).
+
+## [v1.8.0] - Mar 16th, 2026
 ### Added
 * #### Categories
 * #### Event Classes
 * #### Profiles
   1. Added `ai_operation` profile with essential attributes for AI operation event mapping. [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
+  1. Added `macos/macos_users` profile with `egid` and `euid` attributes. This profile is used by the `process` object. [#1538](https://github.com/ocsf/ocsf-schema/pull/1538)
 * #### Objects
   1. Added `ai_model` object with core fields (`name`, `ai_provider`, `version`) for AI operation events. [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
   1. Added `message_context` object for AI system interactions with role-based identification and token usage metrics (`prompt_tokens`, `completion_tokens`, `total_tokens`). [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
   1. Added `token` object for API tokens, client tokens, and API keys used in API activity events. [#1429](https://github.com/ocsf/ocsf-schema/pull/1429)
   1. Added `gpu_info` object for GPU's (array name `gpu_info_list`). [#1527](https://github.com/ocsf/ocsf-schema/pull/1527)
+  1. Added `privilege_info` object for describing specific privileges, actions, or permissions with usage status and `type_id` enum (Read, Write, Execute). [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `privilege_attack_info` object for grouping privileges by potential MITRE ATT&CK techniques. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `service_privilege_analysis` object for privilege analysis results per cloud service or namespace. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `packet` object for network packets (array name `packet_list`). [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
 * #### Observables
 * #### Platform Extensions
+  1. Added `macos` extension (`uid` 3). This extension adds the `macos/macos_users` profile and patches the `process` object to add this profile. [#1538](https://github.com/ocsf/ocsf-schema/pull/1538)
 * #### Dictionary Attributes
   1. Added `ai_provider` attribute for AI model identification. [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
   1. Added `ai_role_id`, `ai_role` attributes for AI communication context with proper sibling relationship. [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
@@ -70,13 +360,36 @@ Thankyou! -->
   1. Added `vram_mode` Derived from `vram_type_id`. [#1527](https://github.com/ocsf/ocsf-schema/pull/1527)
   1. Added `vram_mode_id` Identifier for VRAM type. [#1527](https://github.com/ocsf/ocsf-schema/pull/1527)
   1. Added `total_queued_duration` to track how long an event spent in a queue. [#1536](https://github.com/ocsf/ocsf-schema/pull/1536)
+  1. Added `department` and `is_on_premises_sync_enabled` for ldap and Entra ID support. [#1584](https://github.com/ocsf/ocsf-schema/pull/1584)
   1. Added `is_disabled` and `is_locked` as type `boolean_t` with a "See specific usage" description. [#1583](https://github.com/ocsf/ocsf-schema/pull/1583)
+  1. Added `all_privileges_unused` boolean attribute indicating whether all privileges in a group are unused. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `analyzed_privileges_count` integer attribute for the total count of analyzed privileges. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `attack` singular attribute for MITRE ATT&CK details (complements existing `attacks` array). [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `is_unused` boolean attribute indicating whether an item is unused. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `privilege_attack_info`, `privilege_attack_info_list` attributes for privilege-to-attack mappings. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `privilege_info`, `privilege_info_list` attributes for specific privilege information. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `service_privilege_analysis`, `service_privilege_analysis_list` attributes for service-level privilege analysis. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `total_potential_attacks_count` integer attribute for count of privileges mapping to attack techniques. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `read_count`, `write_count`, and `execute_count` integer attributes. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `pool` attribute of type `group`. [#1521](https://github.com/ocsf/ocsf-schema/pull/1521)
+  1. Added `mac_vendor` as `string_t`. [#1575](https://github.com/ocsf/ocsf-schema/pull/1575)
+  1. Added `network_observation_point` as type `network_endpoint`. [#1571](https://github.com/ocsf/ocsf-schema/pull/1571)
+  1. Added `packet` as a `packet` object. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `packet_list` as an array of `packet` objects. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `encoding`, `encoding_id` attributes for data encoding representation. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `format`, `format_id` attributes for data format identification. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `source_id` normalized identifier for the source. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `sequence_number` attribute for ordering within a sequence. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `start_offset` attribute for the starting offset. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
+  1. Added `end_offset` attribute for the ending offset. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
 ### Improved
 * #### Categories
 * #### Event Classes
   1. Add `app_protocol_name` to `Network Activity` class with clarified description for deep packet inspection. [#1557](https://github.com/ocsf/ocsf-schema/pull/1557)
   1. Enhanced `app_name` description in `Network Activity` class to clarify network application identification by tools such as NBAR. [#1557](https://github.com/ocsf/ocsf-schema/pull/1557)
   1. Added `ai_operation` profile to `process_activity` event class. [#1578](https://github.com/ocsf/ocsf-schema/pull/1578)
+  1. Added `network_observation_point` attribute to the base `Network` event. [#1571](https://github.com/ocsf/ocsf-schema/pull/1571)
+  1. Added `packet_list` to `network` event class. [#1569](https://github.com/ocsf/ocsf-schema/pull/1569)
 * #### Profiles
 * #### Objects
   1. Extended `database` object with AI-specific database types (`Vector (7)`, `Knowledge Graph (8)`) and `embedding_model` field for AI retrieval systems. [#1488](https://github.com/ocsf/ocsf-schema/pull/1488)
@@ -85,21 +398,29 @@ Thankyou! -->
   1. Added `imported_symbols` attribute to the `file` object.  [#1553](https://github.com/ocsf/ocsf-schema/pull/1553)
   1. Updated `fingerprint` object description. Updated the descriptions of `algorithm`, `algorithm_id`, and `value` attributes in the `fingerprint` object. [#1560](https://github.com/ocsf/ocsf-schema/pull/1560)
   1. Added `fingerprints` attribute to the `network_endpoint` object. [#1560](https://github.com/ocsf/ocsf-schema/pull/1560)
+  1. Added `mac_vendor` to the `endpoint` object. [#1575](https://github.com/ocsf/ocsf-schema/pull/1575)
   1. Added `token` as an attribute to the `api` object. [#1429](https://github.com/ocsf/ocsf-schema/pull/1429)
   1. Added `created_time` attribute back to the `authentication_token` object with improved description. [#1429](https://github.com/ocsf/ocsf-schema/pull/1429)
   1. Added `provider` to the `resource_details` object via `cloud` profile. [#1566](https://github.com/ocsf/ocsf-schema/pull/1566)
   1. Added `resource` attribute to the `check` object to describe details about the resource that the check evaluated. [#1574](https://github.com/ocsf/ocsf-schema/pull/1574)
   1. Added `total_queued_duration` to the `metadata` object. [#1536](https://github.com/ocsf/ocsf-schema/pull/1536)
+  1. Added `is_on_premises_sync_enabled` to `Account`. Added `department` to `ldap_person`. Added `ActiveDirectory Account` to `Account.type`. [#1584](https://github.com/ocsf/ocsf-schema/pull/1584)
   1. Added `is_disabled` and `is_locked` attributes to the `account` object. [#1583](https://github.com/ocsf/ocsf-schema/pull/1583)
+  1. Added `analyzed_privileges_count`, `service_privilege_analysis_list`, and `total_potential_attacks_count` attributes to the `permission_analysis_result` object for detailed privilege analysis. [#1581](https://github.com/ocsf/ocsf-schema/pull/1581)
+  1. Added `macos/macos_users` profile to the `process` object via `macos` extension patch. [#1538](https://github.com/ocsf/ocsf-schema/pull/1538)
+  1. Added `pool` attribute to the `endpoint` object. [#1521](https://github.com/ocsf/ocsf-schema/pull/1521)
+  1. Added `uid_alt` attribute to the `group` object. [#1521](https://github.com/ocsf/ocsf-schema/pull/1521)
+
 * #### Observables
 * #### Platform Extensions
 * #### Dictionary Attributes
+  1. Moved all dictionary attributes previously defined in the `linux` extension to the base schema: the `auid`, `egid`, and `euid` dictionary attributes. This was done so the `egid` and `euid` attributes can be used by both the `linux` and `macos` extensions. This changes the internal names of these items in the compiled schema, removing the `linux/` prefix. This should _not_ cause a problem for tooling since compiled classes and objects include processed and enriched versions of these attributes. There is no need to lookup class and object attributes in the dictionary, and indeed doing can yield incomplete and inaccurate information. [#1538](https://github.com/ocsf/ocsf-schema/pull/1538)
 * #### Dictionary Types
   1. The regular expression constraint in dictionary type `file_hash_t` has been removed to use as a general fingerprint with an arbitrary string. **Warning:** This can create a breaking change for some kinds of tooling that process OCSF events. [1564](https://github.com/ocsf/ocsf-schema/pull/1564)
 
 ### Bugfixes
 * #### Event Classes
-  1. Removed erroneous `at_least_one` constraint in `Live Evidence Info` class [#1357](https://github.com/ocsf/ocsf-schema/pull/1537)
+  1. Removed erroneous `at_least_one` constraint in `Live Evidence Info` class [#1537](https://github.com/ocsf/ocsf-schema/pull/1537)
 
 ### Deprecated
 1. Deprecated the `signature` attribute of the file object in favour of the `signatures` attribute. [#1546](https://github.com/ocsf/ocsf-schema/pull/1546)
@@ -108,8 +429,9 @@ Thankyou! -->
   1. The regular expression constraint in dictionary type `file_hash_t` has been removed. This can create a breaking change for some kinds of tooling that process OCSF events. (Repeated item from Dictionary Types section above.) [1564](https://github.com/ocsf/ocsf-schema/pull/1564)
 
 ### Misc
-1. New Extension registration for Synqly [#1579](https://github.com/ocsf/ocsf-schema/pull/1579). 
+1. New Extension registration for Synqly [#1579](https://github.com/ocsf/ocsf-schema/pull/1579).
 1. Added GitHub Actions workflow for automated schema description review using Claude to suggest LLM comprehension improvements on PRs. [#1587](https://github.com/ocsf/ocsf-schema/pull/1587) [#1588](https://github.com/ocsf/ocsf-schema/pull/1588)
+1. Corrected caption for `type` attribute in `group` object: was `Account Type`, now `Group Type`. Also corrected description, which erroneously included 'or account'. [#1590](https://github.com/ocsf/ocsf-schema/pull/1590)
 
 
 
@@ -132,7 +454,7 @@ Thankyou! -->
   1. Added `post_value`, `pre_value` and `return_value` as `string_t`. [#1497](https://github.com/ocsf/ocsf-schema/pull/1497)
   1. Added `launch_type_id` enum and `launch_type` sibling. [#1517](https://github.com/ocsf/ocsf-schema/pull/1517)
   1. Added `log_source` `log_source_uid` `log_format` as `string_t`. [#1483](https://github.com/ocsf/ocsf-schema/pull/1483)
-  1. Added `mac_vendor` as `string_t`. [#1575](https://github.com/ocsf/ocsf-schema/pull/1575)
+  1. Added `network_scope`, `network_scope_id`, `observation_point` and `observation_point_id`. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
 
 ### Improved
 * #### Categories
@@ -144,6 +466,7 @@ Thankyou! -->
   1. Added missing context classification to `windows_service_activity.win_service`. [#1531](https://github.com/ocsf/ocsf-schema/pull/1531)
   1. Added missing requirement to `process_activity.launch_type`. [#1531](https://github.com/ocsf/ocsf-schema/pull/1531)
   1. Added `cumulative_traffic` attribute to the base `Network` event. Updated `traffic` description. [#1529](https://github.com/ocsf/ocsf-schema/pull/1529)
+  1. Added `observation_point` and `observation_point_id` to the base `Network` event. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
 * #### Profiles
 * #### Objects
   1. Added `type`, `type_uid`, and `vendor_id_list` to the `peripheral_device` object. [#1471](https://github.com/ocsf/ocsf-schema/pull/1471)
@@ -161,7 +484,7 @@ Thankyou! -->
   1. Added `hosted_services`, array to the `process` object.
   1. Added `source`, `type`, `log_source`, `original_event_uid`,`log_format`, `transmit_time` to `metadata`. `log_format` to `logger`[#1483](https://github.com/ocsf/ocsf-schema/pull/1483)
   1. Added `start_time`, `end_time` and `timespan` to the `network_traffic` object. Updated `network_traffic` description. [#1529](https://github.com/ocsf/ocsf-schema/pull/1529)
-  1. Added `mac_vendor` to the `endpoint` object. [#1575](https://github.com/ocsf/ocsf-schema/pull/1575)
+  1. Added `network_scope` and `network_scope_id` to the `network_endpoint` object. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
 * #### Observables
 * #### Platform Extensions
 * #### Dictionary Attributes
@@ -193,7 +516,7 @@ Thankyou! -->
   1. Added `access_level`, `programmatic_credentials`, `last_authentication_time`, `access_analysis_result`, `last_used_time`, `accessors`, `granted_privileges`, `identity_activity_metrics`, `password_last_used_time`, `access_type`, `permission_analysis_results`, `additional_restrictions`, `unused_privileges_count`, `condition_keys`, `applications`, `role`, `role_id`. [#1389](https://github.com/ocsf/ocsf-schema/pull/1389)
   1. Added `reg_binary_data`, `reg_integer_data`, `reg_string_data`, `reg_string_list_data` to Windows extension. [#1468](https://github.com/ocsf/ocsf-schema/pull/1468)
   1. Added `is_src_dst_assignment_known` as a boolean. [#1464](https://github.com/ocsf/ocsf-schema/pull/1464)
-  1. Added `network_scope`, `network_scope_id`, `observation_point` and `observation_point_id`. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
+  1. Added `is_readonly` as type `boolean_t` with a "See specific usage" description. [#1438](https://github.com/ocsf/ocsf-schema/pull/1438)
 
 * #### Objects
   1. Added  `access_analysis_result`, `additional_restriction`, `identity_activity_metrics`, `permission_analysis_result`, `programmatic_credential`. [#1389](https://github.com/ocsf/ocsf-schema/pull/1389)
@@ -209,11 +532,10 @@ Thankyou! -->
   1. Added `http_request` and `http_response` objects to the `File Hosting Activity` Class [#1458](https://github.com/ocsf/ocsf-schema/pull/1458)
   1. Added `Account Switch` activity_id to the `Authentication` class. Added `account_switch_type` and `account_switch_type_id` attributes to the `Authentication` class. [#1460](https://github.com/ocsf/ocsf-schema/pull/1460)
   1. Added `is_src_dst_assignment_known` attribute to `Network Activity` class. [#1464](https://github.com/ocsf/ocsf-schema/pull/1464)
-  1. Added `observation_point` and `observation_point_id` to the base `Network` event. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
 
 * #### Objects
   1. Added more `algorithm_id` values and references to the `fingerprint` object. [#1412](https://github.com/ocsf/ocsf-schema/pull/1412)
-  1. Added xxHash H3's 64-bit and 128-bit variants to `algorithm_id` on the `fingerprint` object. [#1420](https://github.com/ocsf/ocsf-schema/pull/1412)
+  1. Added xxHash H3's 64-bit and 128-bit variants to `algorithm_id` on the `fingerprint` object. [#1420](https://github.com/ocsf/ocsf-schema/pull/1420)
   1. Added `Service` to `user` `type_id` enum. [#1428](https://github.com/ocsf/ocsf-schema/pull/1428)
   1. Added `Deleted` to `finding` `status_id` enum. [#1437](https://github.com/ocsf/ocsf-schema/pull/1437)
   1. Added `status` to `related_event` object. [#1434](https://github.com/ocsf/ocsf-schema/pull/1434)
@@ -226,7 +548,7 @@ Thankyou! -->
   1. Added `is_truncated` and `untruncated_size` to `metadata`, `logger` objects. [#1461](https://github.com/ocsf/ocsf-schema/pull/1461)
   1. Added `open_ports` to the `network_interface` object. [#1466](https://github.com/ocsf/ocsf-schema/pull/1466)
   1. Added `reg_binary_data`, `reg_integer_data`, `reg_string_data`, `reg_string_list_data` to `reg_value` object in Windows extension. [#1468](https://github.com/ocsf/ocsf-schema/pull/1468)
-  1. Added `network_scope` and `network_scope_id` to the `network_endpoint` object. [#1481](https://github.com/ocsf/ocsf-schema/pull/1481)
+  1. Added `Patch` as a value of `http_method` in the `http_request` object. [#1427](https://github.com/ocsf/ocsf-schema/pull/1427)
 
 
 ### Misc
@@ -238,7 +560,7 @@ Thankyou! -->
   1. Improved the description of the `bytestring_t` data type. [#1468](https://github.com/ocsf/ocsf-schema/pull/1468)
 
 ### Deprecated
-  1. Deprecated usage of `group` attribute in favor of `groups` in the `databucket` object. [#1344](https://github.com/ocsf/ocsf-schema/pull/1344)
+  1. Deprecated usage of `group` attribute in favor of `groups` in the `databucket` object. [#1444](https://github.com/ocsf/ocsf-schema/pull/1444)
   1. Deprecated usage of `credential_uid` attribute in favor of `programmatic_credentials` in the `user` object. [#1389](https://github.com/ocsf/ocsf-schema/pull/1389)
   1. Deprecated usage of items `3` and `4` in the `type_id` enum in `account` object, in favor of the `type_id` enum in the `user` object. [#1389](https://github.com/ocsf/ocsf-schema/pull/1389)
   1. Deprecated item `9` (`REG_QWORD_LITTLE_ENDIAN`) in the `type_id` enum in the `reg_value` object. Its presence was an error. [#1468](https://github.com/ocsf/ocsf-schema/pull/1468)
@@ -281,7 +603,6 @@ Thankyou! -->
   1. Added `tcp_state_id` as `integer_t`. [#1382](https://github.com/ocsf/ocsf-schema/pull/1382)
   1. Added `query_evidence` as type `query_evidence`. [#1382](https://github.com/ocsf/ocsf-schema/pull/1382)
   1. Added `checks` as type `check`. [#1369](https://github.com/ocsf/ocsf-schema/pull/1369)
-  1. Added 'is_readonly' as type `boolean_t` with a "See specific usage" description. [#1438](https://github.com/ocsf/ocsf-schema/pull/1438)
 * #### Objects
   1. Added `assessment` object to capture evaluations/assessments of configurations/signals. [#1343](https://github.com/ocsf/ocsf-schema/pull/1343)
   1. Added `node`, `edge`, `graph` objects. [#1343](https://github.com/ocsf/ocsf-schema/pull/1343)
@@ -363,7 +684,6 @@ Thankyou! -->
   1. Added `is_read` to `email` object. [#1406](https://github.com/ocsf/ocsf-schema/pull/1406)
   1. Added `cis_controls` to `remediation` object [#1369](https://github.com/ocsf/ocsf-schema/pull/1369)
   1. Added `check` object to `compliance` object [#1369](https://github.com/ocsf/ocsf-schema/pull/1369)
-  1. Added `Patch` as a value of `http_method` in the `http_request` object. [#1427](https://github.com/ocsf/ocsf-schema/pull/1427)
 
 * #### Profiles
   1. Added `malware_scan_info` to `security_control` profile. [#1373](https://github.com/ocsf/ocsf-schema/pull/1373)
@@ -533,6 +853,7 @@ Thankyou! -->
     1. Added `sans` array to `certificate` object. [#1325](https://github.com/ocsf/ocsf-schema/pull/1325)
     1. Added `flag_history` attribute to the `network_connection_info` object. [#1316](https://github.com/ocsf/ocsf-schema/pull/1316)
     1. Added `bytes_missed` attribute to the `network_traffic` object. [#1316](https://github.com/ocsf/ocsf-schema/pull/1316)
+    1. Added `community_uid` to `network_connection_info` object. [#1202](https://github.com/ocsf/ocsf-schema/pull/1202)
 
 ### Bugfixes
 1. Added sibling definition to `confidence_id` in dictionary, accurately associating `confidence` as its sibling. [#1180](https://github.com/ocsf/ocsf-schema/pull/1180)
@@ -631,6 +952,8 @@ Thankyou! -->
     7. Added new activity `Listen` to `Network Activity` and relax requirement of `src_endpoint`. [#1147](https://github.com/ocsf/ocsf-schema/pull/1147)
     8. Added `state`, `state_id` to `Device Config State Change`. [#1143](https://github.com/ocsf/ocsf-schema/pull/1143)
     9. Added `resources` attribute to `Vulnerability Finding` and `Compliance Finding`. [#1150](https://github.com/ocsf/ocsf-schema/pull/1150)
+   10. Added `access_mask` to Entity Management class. [#1114](https://github.com/ocsf/ocsf-schema/pull/1114)
+   11. Added `access_list` to Entity Management class. [#1114](https://github.com/ocsf/ocsf-schema/pull/1114)
 * #### Profiles
     n/a
 * #### Objects
@@ -727,8 +1050,6 @@ n/a
     7. Added a `Preauth` `activity_id` to the `Authentication` class. [#1018](https://github.com/ocsf/ocsf-schema/pull/1018)
     8. Added the `Security Control` profile to the `Datastore Activity` class. [#1030](https://github.com/ocsf/ocsf-schema/pull/1030)
     9. Added `risk_details` to Detection Finding. [#1032](https://github.com/ocsf/ocsf-schema/pull/1032)
-   10. Added `access_mask` to Entity Management class. [#1090](https://github.com/ocsf/ocsf-schema/pull/1090)
-   11. Added `access_list` to Entity Management class. [#1090](https://github.com/ocsf/ocsf-schema/pull/1090)
 
 * #### Profiles
     n/a
@@ -844,7 +1165,6 @@ n/a
     15. Added firewall, router, switch, hub to endpoint `type_id` enum. [#921](https://github.com/ocsf/ocsf-schema/pull/921)
     16. Added `is_vpn` to the `session` object. [#922](https://github.com/ocsf/ocsf-schema/pull/922)
     17. Added `state` to `network_connection_info` object. [#932](https://github.com/ocsf/ocsf-schema/pull/932)
-    18. Added `community_uid` to `network_connection_info` object. [#1202](https://github.com/ocsf/ocsf-schema/pull/1202)
 
 ### Bugfixes
 `n/a`

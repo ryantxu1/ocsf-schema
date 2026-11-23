@@ -26,7 +26,10 @@
           "description": "An existing Data Security finding is suppressed due to inaccurate detection techniques or a known true negative.",
           "@deprecated": {
             "message": "Use <code>status_id</code> attribute instead.",
-            "since": "1.4.0"
+            "since": "1.4.0",
+            "superseded_by": [
+              "status_id"
+            ]
           }
         }
       }
@@ -112,26 +115,6 @@
       "description": "Describes details about additional resources, where classified or sensitive data is stored in, or was accessed from. <p> You can populate this object, if the specific resource type objects available in the class (<code>database, databucket, table, file</code>) aren't sufficient; OR <br> You can also choose to duplicate <code>uid, name</code> of the specific resources objects, for a consistent access to resource uids across all findings.",
       "group": "primary",
       "requirement": "recommended"
-    },
-    "risk_details": {
-      "group": "context",
-      "requirement": "optional",
-      "profile": null
-    },
-    "risk_level": {
-      "group": "context",
-      "requirement": "optional",
-      "profile": null
-    },
-    "risk_level_id": {
-      "group": "context",
-      "requirement": "optional",
-      "profile": null
-    },
-    "risk_score": {
-      "group": "context",
-      "requirement": "optional",
-      "profile": null
     },
     "src_endpoint": {
       "description": "Details about the source endpoint where classified or sensitive data was accessed from.",

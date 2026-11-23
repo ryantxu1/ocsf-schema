@@ -4,10 +4,16 @@
   "description": "Network event is a generic event that defines a set of attributes available in the Network category.",
   "extends": "base_event",
   "name": "network",
+  "profiles": [
+    "network_proxy",
+    "load_balancer",
+    "ai_operation"
+  ],
   "attributes": {
     "$include": [
       "profiles/network_proxy.json",
-      "profiles/load_balancer.json"
+      "profiles/load_balancer.json",
+      "profiles/ai_operation.json"
     ],
     "app_name": {
       "description": "The network application name identified by tools such as NBAR or App ID (e.g., youtube, facebook, webex). This represents a specific network application that uses standard protocols (such as https or quic) to deliver its service.",
@@ -17,13 +23,13 @@
     "app_protocol_name": {
       "description": "The application-layer (Layer 7) protocol name identified by deep packet inspection or packet parsing (e.g., <code>https</code>, <code>quic</code>, <code>ssh</code>, <code>dns</code>), expressed as an IANA-registered service name from the IANA Service Name and Transport Protocol Port Number Registry.\n\n<p><b>Note:</b> Port numbers alone are not always a reliable indicator of the actual application protocol in use.</p>",
       "group": "context",
+      "requirement": "optional",
       "references": [
         {
           "description": "IANA Service Name and Transport Protocol Port Number Registry",
           "url": "https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml"
         }
-      ],
-      "requirement": "optional"
+      ]
     },
     "connection_info": {
       "group": "primary",
@@ -43,12 +49,19 @@
       "group": "context",
       "requirement": "optional"
     },
+    "network_observation_point": {
+      "description": "The network endpoint that observes or inspects network traffic as a third-party system, used when the observer is neither the source nor the destination of the communication (when <code>observation_point_id</code> = 3). Examples include network taps, span ports, inline security devices, or packet capture systems that monitor traffic between other endpoints.",
+      "group": "context",
+      "requirement": "optional"
+    },
     "observation_point": {
       "description": "Indicates whether the source network endpoint, destination network endpoint, or neither served as the observation point for the activity. The value is normalized to the caption of the <code>observation_point_id</code>.",
+      "group": "context",
       "requirement": "optional"
     },
     "observation_point_id": {
       "description": "The normalized identifier of the observation point. The observation point identifier indicates whether the source network endpoint, destination network endpoint, or neither served as the observation point for the activity.",
+      "group": "context",
       "requirement": "optional",
       "enum": {
         "0": {
@@ -65,7 +78,7 @@
         },
         "3": {
           "caption": "Neither",
-          "description": "Neither the source nor destination network endpoint is the observation point."
+          "description": "Neither the source nor destination network endpoint is the observation point. Refer to the <code>network_observation_point</code> attribute for details."
         },
         "4": {
           "caption": "Both",
@@ -76,6 +89,10 @@
           "description": "The observation point is not mapped. See the <code>observation_point</code> attribute for a data source specific value."
         }
       }
+    },
+    "packet_list": {
+      "group": "context",
+      "requirement": "optional"
     },
     "proxy": {
       "group": "primary",
@@ -102,10 +119,6 @@
       "src_endpoint"
     ]
   },
-  "profiles": [
-    "network_proxy",
-    "load_balancer"
-  ],
   "references": [
     {
       "description": "D3FEND™ Ontology d3f:NetworkEvent",

@@ -1,6 +1,6 @@
 # <img src="ocsf.png" alt="OCSF Logo" width="32"/> Open Cybersecurity Schema Framework
 
-[![Version](https://img.shields.io/badge/version-1.8.0--dev-blue.svg)](version.json)
+[![Version](https://img.shields.io/badge/version-1.11.0--dev-blue.svg)](version.json)
 [![License](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
 [![Schema Browser](https://img.shields.io/badge/schema-browser-orange.svg)](https://schema.ocsf.io)
 
@@ -8,7 +8,7 @@ The Open Cybersecurity Schema Framework (OCSF) is an open standard for cybersecu
 
 This repository contains the core schema definitions that enable consistent representation of security events across different tools and platforms. The core schema for cybersecurity events is intended to be agnostic to implementations. OCSF is intended to be used by both products and devices which produce log events, analytic systems, and logging systems which retain log events.
 
-## 🚀 Quick Start
+## Quick Start
 
 **Explore the Schema**: Visit [schema.ocsf.io](https://schema.ocsf.io) to browse the complete schema interactively.
 
@@ -17,21 +17,25 @@ This repository contains the core schema definitions that enable consistent repr
 - [Contributing Guide](CONTRIBUTING.md) - How to contribute to the schema
 - [Changelog](CHANGELOG.md) - Latest updates and changes
 
-## 📁 Repository Structure
+## Repository Structure
 
 ```
 ├── events/          # Event class definitions organized by category
 ├── objects/         # Reusable object definitions
 ├── profiles/        # Schema profiles for specific use cases
-├── extensions/      # Schema extensions (Linux, Windows, etc.)
+├── extensions/      # Platform extensions (Linux, macOS, Windows)
 ├── metaschema/      # Schema validation rules
-├── templates/       # Template definitions
+├── templates/       # Starter files for new event classes, objects, and profiles
+├── changelog.d/     # Changelog entries for the next release, one file per PR
 ├── categories.json  # Event category definitions
 ├── dictionary.json  # Attribute dictionary
+├── extensions.md    # Registry of vendor extension names and UIDs
+├── CHANGELOG.md     # Changes by release
+├── CONTRIBUTING.md  # Contribution guide
 └── version.json     # Current schema version
 ```
 
-## 🎯 What is OCSF?
+## What is OCSF?
 
 OCSF provides:
 - **Standardized Event Schema**: Common structure for cybersecurity events
@@ -45,7 +49,7 @@ The framework consists of:
 - **Objects**: Reusable data structures
 - **Attributes**: Individual data fields with standardized definitions
 
-## 🔧 Usage
+## Usage
 
 OCSF is designed for:
 - **Security Tools**: SIEM, SOAR, EDR, and other security platforms
@@ -53,25 +57,35 @@ OCSF is designed for:
 - **Analytics Platforms**: Tools processing and analyzing security data
 - **Data Pipelines**: ETL processes normalizing security data
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details on:
 - How to propose schema changes
 - Development workflow
 - Community guidelines
 
-## 📋 Versioning
+Pull requests are checked automatically; see [Checks on pull requests](CONTRIBUTING.md#checks-on-pull-requests).
+
+## Governance
+
+OCSF is a Series of LF Projects, LLC. See the [governance repository](https://github.com/ocsf/governance) for the full set of governance documents.
+
+- [OCSF Technical Charter](https://github.com/ocsf/governance/blob/main/OCSF%20Technical%20Charter.pdf)
+- [Steering Committee](https://github.com/ocsf/governance/blob/main/SteeringCommittee.md)
+- [Maintainers](https://github.com/ocsf/governance/blob/main/Maintainers.md)
+
+## Versioning
 
 OCSF follows [semantic versioning](https://semver.org/). Check [version.json](version.json) for the current version.
 
-## 📄 License
+## License
 
 Licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
 **Need Help?** 
-- 📖 [Documentation](https://github.com/ocsf/ocsf-docs)
-- 🌐 [Schema Browser](https://schema.ocsf.io)
-- 💬 [Community Discussions](https://github.com/ocsf/ocsf-schema/discussions)
-- ⚡ [Slack Workspace](https://github.com/ocsf#slack-workspace)
+- [Documentation](https://github.com/ocsf/ocsf-docs)
+- [Schema Browser](https://schema.ocsf.io)
+- [Community Discussions](https://github.com/ocsf/ocsf-schema/discussions)
+- [Slack Workspace](https://github.com/ocsf#slack-workspace)

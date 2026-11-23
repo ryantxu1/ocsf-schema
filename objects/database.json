@@ -3,6 +3,9 @@
   "description": "The database object is used for databases which are typically datastore services that contain an organized collection of structured and unstructured data or a types of data.",
   "extends": "_entity",
   "name": "database",
+  "profiles": [
+    "data_classification"
+  ],
   "attributes": {
     "$include": [
       "profiles/data_classification.json"
@@ -13,6 +16,10 @@
     },
     "desc": {
       "description": "The description of the database.",
+      "requirement": "optional"
+    },
+    "embedding_model": {
+      "description": "Model used for creating embeddings (if applicable). For example: <code>text-embedding-ada-002</code> or <code>all-MiniLM-L6-v2</code>.",
       "requirement": "optional"
     },
     "groups": {
@@ -72,15 +79,8 @@
     },
     "uid": {
       "description": "The unique identifier of the database."
-    },
-    "embedding_model": {
-      "description": "Model used for creating embeddings (if applicable). For example: <code>text-embedding-ada-002</code> or <code>all-MiniLM-L6-v2</code>.",
-      "requirement": "optional"
     }
   },
-  "profiles": [
-    "data_classification"
-  ],
   "references": [
     {
       "description": "D3FEND™ Ontology d3f:Database.",

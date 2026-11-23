@@ -4,9 +4,24 @@
   "extends": "object",
   "name": "job",
   "attributes": {
+    "bytes_processed": {
+      "description": "The number of bytes the job read or examined while performing its work.",
+      "requirement": "optional"
+    },
+    "bytes_written": {
+      "description": "The number of bytes the job committed to the destination, after any compression or deduplication was applied.",
+      "requirement": "optional"
+    },
     "cmd_line": {
       "description": "The job command line.",
-      "requirement": "recommended"
+      "requirement": "recommended",
+      "@deprecated": {
+        "message": "Use the <code>job_action.cmd_line</code> attribute instead.",
+        "since": "1.9.0",
+        "superseded_by": [
+          "job_action.cmd_line"
+        ]
+      }
     },
     "created_time": {
       "description": "The time when the job was created.",
@@ -20,16 +35,58 @@
       "description": "The file that pertains to the job.",
       "requirement": "optional"
     },
+    "job_actions": {
+      "description": "An array of actions that will be performed by the job when certain conditions are met.",
+      "requirement": "optional"
+    },
+    "job_triggers": {
+      "description": "An array of conditions or events that, when met, will initiate the job to perform specified actions.",
+      "requirement": "optional"
+    },
     "last_run_time": {
       "description": "The time when the job was last run.",
-      "requirement": "recommended"
+      "requirement": "recommended",
+      "@deprecated": {
+        "message": "Use the <code>job_trigger.last_run_time</code> attribute instead.",
+        "since": "1.9.0",
+        "superseded_by": [
+          "job_trigger.last_run_time"
+        ]
+      }
     },
     "name": {
       "description": "The name of the job.",
-      "requirement": "required"
+      "requirement": "recommended"
     },
     "next_run_time": {
       "description": "The time when the job will next be run.",
+      "requirement": "optional",
+      "@deprecated": {
+        "message": "Use the <code>job_trigger.next_run_time</code> attribute instead.",
+        "since": "1.9.0",
+        "superseded_by": [
+          "job_trigger.next_run_time"
+        ]
+      }
+    },
+    "progress_current": {
+      "description": "The units of work the job has completed so far, counted in <code>progress_unit</code>.",
+      "requirement": "optional"
+    },
+    "progress_total": {
+      "description": "The total units of work the job is expected to perform, counted in <code>progress_unit</code>.",
+      "requirement": "optional"
+    },
+    "progress_unit": {
+      "description": "The unit that the job's <code>progress_current</code> and <code>progress_total</code> are counted in, normalized to the caption of the <code>progress_unit_id</code> value. In the case of 'Other', it is defined by the event source.",
+      "requirement": "optional"
+    },
+    "progress_unit_id": {
+      "description": "The normalized identifier of the unit that the job's <code>progress_current</code> and <code>progress_total</code> are counted in.",
+      "requirement": "optional"
+    },
+    "queue_name": {
+      "description": "The name of the queue that the job was dispatched to.",
       "requirement": "optional"
     },
     "run_state": {
@@ -55,15 +112,66 @@
         "4": {
           "caption": "Stopped"
         },
+        "5": {
+          "caption": "Disabled"
+        },
         "99": {
           "caption": "Other"
         }
       }
     },
+    "throughput": {
+      "description": "The rate at which the job processed data, in bytes per second.",
+      "requirement": "optional"
+    },
+    "type": {
+      "description": "The job type, normalized to the caption of the <code>type_id</code> value. In the case of 'Other', it is defined by the event source.",
+      "requirement": "optional"
+    },
+    "type_id": {
+      "description": "The job type, i.e. the mechanism that executes the job.",
+      "requirement": "recommended",
+      "enum": {
+        "0": {
+          "caption": "Unknown",
+          "description": "The job orchestration mechanism is unknown."
+        },
+        "1": {
+          "caption": "Task Scheduler",
+          "description": "The job is executed by the Task Scheduler on Windows."
+        },
+        "2": {
+          "caption": "Cron",
+          "description": "The job is executed by <code>cron</code> on Linux, macOS, or another a Unix-like OS."
+        },
+        "3": {
+          "caption": "Systemd",
+          "description": "The job is executed by <code>systemd</code> on Linux."
+        },
+        "4": {
+          "caption": "Launchd",
+          "description": "The job is executed by <code>launchd</code> on macOS."
+        },
+        "99": {
+          "caption": "Other",
+          "description": "The job orchestration mechanism is not mapped. See the <code>type</code> attribute, which contains a data source specific value."
+        }
+      }
+    },
+    "uid": {
+      "description": "The unique job identifier.",
+      "requirement": "optional"
+    },
     "user": {
       "description": "The user that created the job.",
       "requirement": "optional"
     }
+  },
+  "constraints": {
+    "at_least_one": [
+      "name",
+      "type_id"
+    ]
   },
   "references": [
     {

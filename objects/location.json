@@ -4,7 +4,13 @@
   "description": "The Geo Location object describes a geographical location, usually associated with an IP address.",
   "extends": "object",
   "name": "location",
+  "profiles": [
+    "physical_site"
+  ],
   "attributes": {
+    "$include": [
+      "profiles/physical_site.json"
+    ],
     "aerial_height": {
       "requirement": "optional"
     },
@@ -42,8 +48,12 @@
     "isp": {
       "requirement": "optional",
       "@deprecated": {
-        "message": "Utilize <code>isp</code> attribute available in <code>network_endpoint, whois</code> objects according to your use-case.",
-        "since": "1.5.0"
+        "message": "Use the <code>network_endpoint.isp</code> or <code>whois.isp</code> attribute according to your use-case.",
+        "since": "1.5.0",
+        "superseded_by": [
+          "network_endpoint.isp",
+          "whois.isp"
+        ]
       }
     },
     "lat": {
@@ -53,7 +63,7 @@
       "requirement": "optional"
     },
     "postal_code": {
-      "requirement": "optional"
+      "requirement": "recommended"
     },
     "pressure_altitude": {
       "requirement": "optional"
@@ -64,7 +74,7 @@
     },
     "region": {
       "description": "The alphanumeric code that identifies the principal subdivision (e.g. province or state) of the country. For example, 'CH-VD' for the Canton of Vaud, Switzerland",
-      "requirement": "optional",
+      "requirement": "recommended",
       "references": [
         {
           "description": "ISO Region Codes",
@@ -81,6 +91,7 @@
     "at_least_one": [
       "city",
       "country",
+      "physical_site",
       "postal_code",
       "region"
     ]

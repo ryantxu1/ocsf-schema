@@ -3,6 +3,10 @@
   "description": "The databucket object is a basic container that holds data, typically organized through the use of data partitions.",
   "extends": "_resource",
   "name": "databucket",
+  "profiles": [
+    "data_classification",
+    "cloud"
+  ],
   "attributes": {
     "$include": [
       "profiles/data_classification.json"
@@ -41,7 +45,10 @@
       "requirement": "optional",
       "@deprecated": {
         "message": "Use the <code>groups</code> attribute instead.",
-        "since": "1.6.0"
+        "since": "1.6.0",
+        "superseded_by": [
+          "groups"
+        ]
       }
     },
     "groups": {
@@ -134,10 +141,6 @@
       "requirement": "optional"
     }
   },
-  "profiles": [
-    "data_classification",
-    "cloud"
-  ],
   "references": [
     {
       "description": "D3FEND™ Ontology d3f:CloudStorage.",

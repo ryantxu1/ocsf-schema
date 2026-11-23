@@ -1,0 +1,72 @@
+name: Schema Description Review - Prepare
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # Only the paths review_descriptions.py actually reads: core and
+    # extension objects, event classes, profiles, and dictionaries, and
+    # changelog entries.
+    paths:
+      - "objects/**.json"
+      - "events/**.json"
+      - "profiles/**.json"
+      - "dictionary.json"
+      - "extensions/*/objects/**.json"
+      - "extensions/*/events/**.json"
+      - "extensions/*/profiles/**.json"
+      - "extensions/*/dictionary.json"
+      - "changelog.d/*.md"
+      - "!changelog.d/README.md"
+      - "CHANGELOG.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: Prepare description review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+
+      - name: Install compiler
+        run: pip install ocsf-schema-compiler
+
+      - name: Compile schema
+        run: ocsf-schema-compiler . > compiled_schema.json
+
+      - name: Collect PR metadata
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          echo "$PR_NUMBER" > pr_number.txt
+          # Use -U15 so deeply-nested edits (e.g. enum-only changes) include
+          # enough surrounding context for the review context extractor to
+          # identify the enclosing attribute.
+          git diff -U15 "$BASE_SHA...$HEAD_SHA" > pr_diff.txt
+          git diff --name-only "$BASE_SHA...$HEAD_SHA" > changed_files.txt
+
+      - name: Extract review context
+        run: python .github/scripts/review_descriptions.py prepare
+
+      - name: Upload review context
+        uses: actions/upload-artifact@v7
+        with:
+          name: review-context
+          path: review_context.json
+          retention-days: 1

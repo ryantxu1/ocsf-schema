@@ -4,9 +4,15 @@
   "description": "Web Resource Access Activity events describe successful/failed attempts to access a web resource over HTTP.",
   "extends": "application",
   "name": "web_resource_access_activity",
+  "profiles": [
+    "network_proxy"
+  ],
   "@deprecated": {
-    "message": "Use the <code>Web Resources Activity</code> class with the <code>Security Control</code> and/or <code>Network Proxy</code> profile instead.",
-    "since": "1.1.0"
+    "message": "Use the <code>web_resources_activity</code> class with the <code>security_control</code> and/or <code>network_proxy</code> profile instead.",
+    "since": "1.1.0",
+    "superseded_by": [
+      "web_resources_activity"
+    ]
   },
   "attributes": {
     "$include": [
@@ -62,8 +68,5 @@
       "group": "primary",
       "requirement": "required"
     }
-  },
-  "profiles": [
-    "network_proxy"
-  ]
+  }
 }

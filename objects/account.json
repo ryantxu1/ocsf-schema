@@ -4,6 +4,17 @@
   "extends": "_entity",
   "name": "account",
   "attributes": {
+    "is_disabled": {
+      "description": "Indicates if the account is disabled.",
+      "requirement": "optional"
+    },
+    "is_locked": {
+      "description": "Indicates if the account is locked. For example, due to the amount of failed logins.",
+      "requirement": "optional"
+    },
+    "is_on_premises_sync_enabled": {
+      "requirement": "optional"
+    },
     "labels": {
       "description": "The list of labels associated to the account.",
       "requirement": "optional"
@@ -40,21 +51,28 @@
           "caption": "AWS IAM User",
           "@deprecated": {
             "message": "Utilize <code>user.type_id</code> to represent this information.",
-            "since": "1.6.0"
+            "since": "1.6.0",
+            "superseded_by": [
+              "user.type_id"
+            ]
           }
         },
         "4": {
           "caption": "AWS IAM Role",
           "@deprecated": {
             "message": "Utilize <code>user.type_id</code> to represent this information.",
-            "since": "1.6.0"
+            "since": "1.6.0",
+            "superseded_by": [
+              "user.type_id"
+            ]
           }
         },
         "5": {
           "caption": "GCP Account"
         },
         "6": {
-          "caption": "Azure AD Account"
+          "caption": "Azure AD Account",
+          "description": "Note: The new product name for Azure AD is Microsoft Entra ID."
         },
         "7": {
           "caption": "Mac OS Account"
@@ -92,6 +110,9 @@
         "18": {
           "caption": "Email Account"
         },
+        "19": {
+          "caption": "ActiveDirectory Account"
+        },
         "99": {
           "caption": "Other",
           "description": "The account type is not mapped."
@@ -101,14 +122,6 @@
     "uid": {
       "observable": 35,
       "description": "The unique identifier of the account (e.g. <code> AWS Account ID </code>, <code> OCID </code>, <code> GCP Project ID </code>, <code> Azure Subscription ID </code>, <code> Google Workspace Customer ID </code>, or <code> M365 Tenant UID</code>)."
-    },
-    "is_disabled": {
-      "description": "Indicates if the account is disabled.",
-      "requirement": "optional"
-    },
-    "is_locked": {
-      "description": "Indicates if the account is locked. For example, due to the amount of failed logins.",
-      "requirement": "optional"
     }
   },
   "references": [

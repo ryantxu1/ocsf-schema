@@ -3,6 +3,9 @@
   "description": "The Metadata object describes the metadata associated with the event.",
   "extends": "object",
   "name": "metadata",
+  "profiles": [
+    "data_classification"
+  ],
   "attributes": {
     "$include": [
       "profiles/data_classification.json"
@@ -32,6 +35,12 @@
       "description": "The list of labels attached to the event. For example: <code>[\"sample\", \"dev\"]</code>",
       "requirement": "optional"
     },
+    "log_facility": {
+      "requirement": "optional"
+    },
+    "log_facility_id": {
+      "requirement": "optional"
+    },
     "log_format": {
       "caption": "Log Source Format",
       "description": "The format of data in the log where the data originated. For example CSV, XML, Windows Multiline, JSON, syslog or Cisco Log Schema.",
@@ -59,9 +68,11 @@
       "requirement": "optional"
     },
     "logged_time": {
+      "description": "The ultimate logged time in the event pipeline - when the event reached its final destination (e.g., SIEM, data lake). If <code>loggers</code> is populated, this should match the <code>logged_time</code> of the last entry in the <code>loggers</code> array. This is distinct from <code>time</code> (when the activity occurred) and <code>processed_time</code> (when an intermediate system processed the event).",
       "requirement": "optional"
     },
     "loggers": {
+      "description": "An ordered array of Logger objects describing each hop in the event pipeline between the source and its final destination. Each entry captures the logging product, device, and timestamps (<code>logged_time</code>, <code>transmit_time</code>) at that stage. The last entry's <code>logged_time</code> should match <code>metadata.logged_time</code>.",
       "requirement": "optional"
     },
     "modified_time": {
@@ -76,12 +87,17 @@
       "requirement": "recommended"
     },
     "processed_time": {
+      "description": "The time when the event was processed by an intermediate system (e.g., ETL pipeline, event processor) before reaching its final destination. Can be used with <code>logged_time</code> to calculate queuing duration via <code>total_queued_duration</code>.",
       "requirement": "optional"
     },
     "product": {
       "requirement": "required"
     },
     "profiles": {
+      "requirement": "optional"
+    },
+    "received_time": {
+      "description": "The time when the event was first received in the event pipeline, i.e. by the first logger. In a single-hop pipeline where the event is received and logged simultaneously, this matches logged_time. If loggers is populated, this value should match loggers[0].received_time, or loggers[0].logged_time when the first logger does not record a separate received_time; per-hop received times are recorded in loggers[].received_time.",
       "requirement": "optional"
     },
     "reporter": {
@@ -103,7 +119,7 @@
       "requirement": "recommended"
     },
     "total_queued_duration": {
-      "description": "The amount of time an event spent in a queue awaiting processing. In this case, the value is the difference between <code>processed_time</code> and <code>logged_time</code>. This duration is inclusive of all queues between the originator of the event and the intended long-term storage destination of the event.",
+      "description": "The amount of time an event spent in a queue awaiting processing. In this case, the value is <code>logged_time</code> minus <code>processed_time</code>. This duration is inclusive of all queues between the originator of the event and the intended long-term storage destination of the event.",
       "requirement": "optional"
     },
     "transformation_info_list": {
@@ -127,13 +143,16 @@
       "requirement": "optional"
     },
     "version": {
-      "description": "The version of the OCSF schema, using Semantic Versioning Specification (<a target='_blank' href='https://semver.org'>SemVer</a>). For example: <code>1.0.0.</code> Event consumers use the version to determine the available event attributes.",
-      "requirement": "required"
+      "description": "The version of the OCSF schema, using Semantic Versioning Specification (SemVer). For example: <code>1.0.0</code>. Event consumers use the version to determine the available event attributes.",
+      "requirement": "required",
+      "references": [
+        {
+          "description": "Semantic Versioning Specification (SemVer)",
+          "url": "https://semver.org"
+        }
+      ]
     }
   },
-  "profiles": [
-    "data_classification"
-  ],
   "references": [
     {
       "description": "D3FEND™ Ontology d3f:Metadata",

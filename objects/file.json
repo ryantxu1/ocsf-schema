@@ -4,6 +4,9 @@
   "description": "The File object represents the metadata associated with a file stored in a computer system. It encompasses information about the file itself, including its attributes, properties, and organizational details.",
   "extends": "_entity",
   "name": "file",
+  "profiles": [
+    "data_classification"
+  ],
   "attributes": {
     "$include": [
       "profiles/data_classification.json"
@@ -38,6 +41,9 @@
       "description": "The description of the file, as returned by file system. For example: the description as returned by the Unix file command or the Windows file type.",
       "requirement": "optional"
     },
+    "download_info": {
+      "requirement": "optional"
+    },
     "drive_type": {
       "requirement": "optional"
     },
@@ -60,8 +66,18 @@
       "requirement": "optional"
     },
     "internal_name": {
-      "description": "The name of the file as identified within the file itself. This contrasts with the name by which the file is known on disk. Where available, the internal name is widely used by security practitioners and detection content because the on-disk file name is not reliable. On the Windows OS, most PE files contain a <a href=\"https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource\">VERSIONINFO</a> resource from which the internal name can be obtained. On macOS, binaries can optionally embed a copy of the application's Info.plist file which in turn contains the name of the executable.",
-      "requirement": "optional"
+      "description": "The name of the file as identified within the file itself. This contrasts with the name by which the file is known on disk. Where available, the internal name is widely used by security practitioners and detection content because the on-disk file name is not reliable. On the Windows OS, most PE files contain a <code>VERSIONINFO</code> resource from which the internal name can be obtained. On macOS, binaries can optionally embed a copy of the application's <code>Info.plist</code> file which in turn contains the name of the executable.",
+      "requirement": "optional",
+      "references": [
+        {
+          "description": "VERSIONINFO resource",
+          "url": "https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource"
+        },
+        {
+          "description": "Info.plist file",
+          "url": "https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html"
+        }
+      ]
     },
     "is_deleted": {
       "description": "Indicates if the file was deleted from the filesystem.",
@@ -70,6 +86,21 @@
     "is_encrypted": {
       "description": "Indicates if the file is encrypted.",
       "requirement": "optional"
+    },
+    "is_hidden": {
+      "description": "Indicates that the file or directory is hidden from ordinary directory listings and default user interfaces. The value is <code>true</code> when the hidden file attribute is set (on a Windows endpoint), when the file is a dot file (on a Unix-like OS), or when the user hidden file flag is set.",
+      "requirement": "optional",
+      "source": "FILE_ATTRIBUTE_HIDDEN; UF_HIDDEN",
+      "references": [
+        {
+          "description": "File Attribute Constants, FILE_ATTRIBUTE_HIDDEN",
+          "url": "https://learn.microsoft.com/en-us/windows/win32/fileio/file-attribute-constants"
+        },
+        {
+          "description": "File flags system call manual page, UF_HIDDEN flag",
+          "url": "https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/chflags.2.html"
+        }
+      ]
     },
     "is_public": {
       "description": "Indicates if the file is publicly accessible. For example in an object's public access in AWS S3",
@@ -84,6 +115,7 @@
       "requirement": "optional"
     },
     "mime_type": {
+      "description": "The Multipurpose Internet Mail Extensions (MIME) type of the file, if applicable.",
       "requirement": "optional"
     },
     "modified_time": {
@@ -117,11 +149,18 @@
     "security_descriptor": {
       "requirement": "optional"
     },
+    "shannon_entropy": {
+      "description": "The Shannon entropy of the full file content, measured in bits per byte over the distribution of byte values, ranging from <code>0.0</code> to <code>8.0</code>. Values close to <code>8.0</code> indicate content that is compressed, encrypted, or packed, while plain text and uncompressed data typically score lower.",
+      "requirement": "optional"
+    },
     "signature": {
       "requirement": "optional",
       "@deprecated": {
         "message": "Use the <code>signatures</code> attribute.",
-        "since": "1.8.0"
+        "since": "1.8.0",
+        "superseded_by": [
+          "signatures"
+        ]
       }
     },
     "signatures": {
@@ -201,13 +240,11 @@
       "requirement": "optional"
     },
     "xattributes": {
+      "description": "An unordered collection of zero or more name/value pairs where each pair represents a file or folder extended attribute.<p>For example: Windows alternate data stream attributes (ADS stream name, ADS size, etc.), user-defined or application-defined attributes, ACL, owner, primary group, etc. Examples from DCS: </p><ul><li><strong>ads_name</strong></li><li><strong>ads_size</strong></li><li><strong>dacl</strong></li><li><strong>owner</strong></li><li><strong>primary_group</strong></li><li><strong>link_name</strong> - name of the link associated to the file.</li><li><strong>hard_link_count</strong> - the number of links that are associated to the file.</li></ul>",
       "requirement": "optional"
     }
   },
   "constraints": {},
-  "profiles": [
-    "data_classification"
-  ],
   "references": [
     {
       "description": "D3FEND™ Ontology d3f:File",

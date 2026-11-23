@@ -1,13 +1,15 @@
 {
   "uid": 3,
   "caption": "API Activity",
-  "description": "API events describe general CRUD (Create, Read, Update, Delete) API activities, e.g. (AWS Cloudtrail)",
+  "description": "API events describe general API activities: create, read, update, delete and list.",
   "extends": "application",
   "name": "api_activity",
+  "profiles": [
+    "trace"
+  ],
   "attributes": {
     "$include": [
-      "profiles/trace.json",
-      "profiles/ai_operation.json"
+      "profiles/trace.json"
     ],
     "activity_id": {
       "enum": {
@@ -26,6 +28,10 @@
         "4": {
           "caption": "Delete",
           "description": "The API call in the event pertains to a 'delete' activity."
+        },
+        "5": {
+          "caption": "List",
+          "description": "The API call in the event pertains to a 'list' activity, which returns a collection of resources rather than one resource."
         }
       }
     },
@@ -63,9 +69,5 @@
       "group": "primary",
       "requirement": "required"
     }
-  },
-  "profiles": [
-    "trace",
-    "ai_operation"
-  ]
+  }
 }
